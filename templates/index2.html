@@ -1,0 +1,17 @@
+{% extends "layout1.html" %}
+
+{%block body%}
+<div class =  "jumbotron text-center">
+    <h3>Kardelenin İlk Projesine Hoş Geldin</h3>
+    <p>Merhaba sayın seyirciler</p>
+</div>
+
+<ul>
+
+    {%for article in articles%}
+    <li>Article Id: {{article.id}} - Title: {{article.title}} - Content {{article.content}}</li>
+    {%endfor%}
+</ul>
+
+{%endblock %}
+
