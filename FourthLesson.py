@@ -45,7 +45,7 @@ def about():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     form = RegisterForm(request.form)
-    if request.method == "POST":
+    if request.method == "POST" and form.validate(): #form.validate istenen tüm şartları sağlaması halinde True döner. Formda doldurulan alanlarda bir problem olup olmadığı kontrol edilir
         return redirect(url_for("index")) #fonksiyon ismine göre belli bir sayfaya göndermek için
     else:
         return render_template("register.html", form= form)
