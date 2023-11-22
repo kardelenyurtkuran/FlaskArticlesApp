@@ -35,6 +35,11 @@ class RegisterForm(FlaskForm):
     ])
     confirm = PasswordField("Parola Doğrula")
 
+class LoginForm(FlaskForm):
+    username = StringField("Kullanıcı Adı")
+    password = PasswordField("Parola")
+
+
 @app.route("/")
 def index():
     return render_template("index2.html")
@@ -60,9 +65,9 @@ def register():
             connection.commit() #databaseden get yapılacağı zaman bunu kullanmana gerek yok
             cursor.close() #arka planda gereksiz kaynak kullanmamak için
             flash("Başarıyla Kayıt Oldunuz", "success") #message, category
-            return redirect(url_for("index")) #fonksiyon ismine göre belli bir sayfaya göndermek için
+            return redirect(url_for("login")) #fonksiyon ismine göre belli bir sayfaya göndermek için, kayıt olduktan sonra giriş yap sayfasına gelir
         else:
-            return render_template("register.html", form= form)
+            return render_template("register.html", form= form) #RegisterForm ile oluşturduğun formu göndermek için form=form
     except Exception as e:
         print(e)
 
@@ -70,6 +75,12 @@ def register():
 @app.route("/article/<string:id>")
 def detail(id):
     return "Article Id:" + id
+
+#Login İşlemi
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    form = LoginForm(request.form)
+    return render_template("login.html", form=form)  #LoginForm ile oluşturduğun formu göndermek için form=form
 
 if __name__ == "__main__":
     app.run(debug=True)
