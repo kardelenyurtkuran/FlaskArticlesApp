@@ -1,28 +1,22 @@
 {% extends "layout1.html" %}
 
-{%block body %}
-{% from "includes/formhelpers.html" import render_field %}
+{% block body %}
+    {% from "includes/formhelpers.html" import render_field %}
 
-<h3>Kayıt Olun</h3>
-<hr>
+    <h3>Kayıt Olun</h3>
+    <hr>
 
-    <form method=post>
-  <dl>
-    {{ render_field(form.name, class= "form-control") }}
-    {{ render_field(form.username, class= "form-control") }}
-    {{ render_field(form.email, class= "form-control") }}
-    {{ render_field(form.password, class= "form-control") }}
-    {{ render_field(form.confirm, class= "form-control") }}
-  </dl>
-  <button type="submit" class="btn btn-dark">Register</button>
-</form>
+    <form method="post" action="/register">
+        {{ form.csrf_token }}
+        <dl>
+            {{ render_field(form.name, class="form-control") }}
+            {{ render_field(form.username, class="form-control") }}
+            {{ render_field(form.email, class="form-control") }}
+            {{ render_field(form.password, class="form-control") }}
+            {{ render_field(form.confirm, class="form-control") }}
+        </dl>
+        <button type="submit" class="btn btn-dark">Register</button>
+    </form>
 
-</hr>
-{%endblock body %}
-
-
-<form method="post" action="/register">
-    {{ form.csrf_token }}
-
-    <input type="submit" value="Submit">
-</form>
+    <hr>
+{% endblock body %}
