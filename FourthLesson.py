@@ -80,6 +80,27 @@ def detail(id):
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm(request.form)
+    if request.method == "POST":
+        username =form.username.data
+        password_entered = form.password.data
+        cursor = connection.cursor()
+        query = "SELECT * FROM users WHERE username = %s"
+        result = cursor.execute(query, (username,)) #tek elemanlı demetse eğer yanına , koymalısın yoksa demet olarak algılamıyor
+
+        if result > 0: #girilen kullanıcı adına sahip kullanıcı varsa
+            data = cursor.fetchone() # username'e sahip satırın tamamı
+            real_password = data["password"]
+            if sha256_crypt.verify(password_entered, real_password): #kullanıcı var ve parolası doğru
+                flash("Başarıyla giriş yaptınız", "success")
+                return redirect(url_for("index"))
+            else: #parola yanlış
+                flash("Şifre Hatalı", "danger")
+                return redirect(url_for("login"))
+        else: #kullanıcı yok
+            flash("Böyle bir kullanıcı bulunmuyor", "danger")
+            return redirect(url_for("login"))
+
+        cursor.close()  # arka planda gereksiz kaynak kullanmamak için
     return render_template("login.html", form=form)  #LoginForm ile oluşturduğun formu göndermek için form=form
 
 if __name__ == "__main__":
