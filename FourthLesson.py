@@ -90,18 +90,30 @@ def login():
         if result > 0: #girilen kullanıcı adına sahip kullanıcı varsa
             data = cursor.fetchone() # username'e sahip satırın tamamı
             real_password = data["password"]
+
             if sha256_crypt.verify(password_entered, real_password): #kullanıcı var ve parolası doğru
                 flash("Başarıyla giriş yaptınız", "success")
+                session["logged_in"] = True  #Oturum kontrolü
+                session["username"] = username
+
                 return redirect(url_for("index"))
+
             else: #parola yanlış
                 flash("Şifre Hatalı", "danger")
+                session["logged_in"] = False  # Oturum kontrolü
                 return redirect(url_for("login"))
+
         else: #kullanıcı yok
             flash("Böyle bir kullanıcı bulunmuyor", "danger")
+            session["logged_in"] = False  # Oturum kontrolü
             return redirect(url_for("login"))
 
         cursor.close()  # arka planda gereksiz kaynak kullanmamak için
     return render_template("login.html", form=form)  #LoginForm ile oluşturduğun formu göndermek için form=form
-
+# Logout
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
 if __name__ == "__main__":
     app.run(debug=True)
