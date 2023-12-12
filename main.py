@@ -4,6 +4,7 @@ import pymysql.cursors
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, EqualTo, Length, Email
 from passlib.hash import sha256_crypt
+from functools import wraps #decoratorlarda kullanılan yapı
 
 app = Flask(__name__)
 
@@ -22,6 +23,19 @@ connection = pymysql.connect(
     charset='utf8mb4',
     cursorclass=pymysql.cursors.DictCursor
 )
+
+#Kullanıcı giriş decorator
+#Flask dökümanları içinden hazır bulabilirsin
+
+def login_required(f): #decorator ana yapı
+    @wraps(f) #decorator ana yapı
+    def decorated_function(*args, **kwargs): #decorator ana yapı
+        if "logged_in" in session: #session içinde logged_in varsa değer True olur yani kullanıcı giriş yapmıştır. Bu durumda kullanıcı girişi yapılmadan ../dashboard uzatsına ulaşılamaz
+            return f(*args, **kwargs) #decorator ana yapı
+        else:
+            flash("Bu sayfayı görüntülemek için lütfen giriş yapın", "danger")
+            return redirect(url_for("login")) #giriş sayfasına yönlendir
+    return decorated_function #decorator ana yapı
 
 
 # Kullanıcı Kayıt Formu
@@ -48,7 +62,10 @@ def index():
 def about():
     return render_template("about.html")
 
+
 @app.route("/dashboard")
+@login_required #giriş yapılmadan hemen önce decorator kontrol et, tüm giriş yaptığın fonksiyonlarda bu yapıyı kullan,
+# büyük yapılarda her seferinde session kontrol edersin çok fazla if şartı yazman gerekir, decorator aktif kullan
 def dashboard():
     return render_template("dashboard.html")
 
