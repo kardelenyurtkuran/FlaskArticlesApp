@@ -136,6 +136,17 @@ def login():
 @app.route("/addarticle", methods=["GET", "POST"])
 def addarticle():
     form = ArticleForm(request.form)
+    print(session["username"])
+    if request.method == "POST" and form.validate():
+        title = form.title.data
+        content = form.content.data
+        cursor = connection.cursor()
+        query = "INSERT INTO articles(title, author, content) VALUES(%s, %s, %s)"
+        cursor.execute(query, (title,session["username"], content))
+        connection.commit()  # databaseden get yapılacağı zaman bunu kullanmana gerek yok
+        cursor.close()
+        flash("Makale Başarıyla Eklendi", "success")
+        return redirect(url_for("dashboard"))
     return render_template("addarticle.html", form =form)  #LoginForm ile oluşturduğun formu göndermek için form=form
 
 #Makale Form
