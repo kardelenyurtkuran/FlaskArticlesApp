@@ -1,7 +1,7 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
 from flask_wtf import FlaskForm
 import pymysql.cursors
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, TextAreaField
 from wtforms.validators import DataRequired, EqualTo, Length, Email
 from passlib.hash import sha256_crypt
 from functools import wraps #decoratorlarda kullanılan yapı
@@ -131,6 +131,21 @@ def login():
 
         cursor.close()  # arka planda gereksiz kaynak kullanmamak için
     return render_template("login.html", form=form)  #LoginForm ile oluşturduğun formu göndermek için form=form
+
+#Makale ekleme
+@app.route("/addarticle", methods=["GET", "POST"])
+def addarticle():
+    form = ArticleForm(request.form)
+    return render_template("addarticle.html", form =form)  #LoginForm ile oluşturduğun formu göndermek için form=form
+
+#Makale Form
+
+class ArticleForm(FlaskForm):
+    title = StringField("Makale Başlığı", validators=[Length(min=5, max=100)]) #lineedit benzeri bir alan, makale başlığı
+    content = TextAreaField("Makale İçeriği", validators=[Length(min=10)]) #lineeditten daha geniş bir alan oluşturmak için, makale içeriği
+
+
+
 # Logout
 @app.route('/logout')
 def logout():
