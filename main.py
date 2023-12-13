@@ -62,6 +62,18 @@ def index():
 def about():
     return render_template("about.html")
 
+@app.route("/articles")
+def articles():
+    cursor =connection.cursor()
+    query = "SELECT * FROM articles"
+    result = cursor.execute(query)
+
+    if result>0: #eğer makale varsa
+        articles = cursor.fetchall()
+        return render_template("articles.html", articles = articles)
+    else:
+        return render_template("articles.html")
+
 
 @app.route("/dashboard")
 @login_required #giriş yapılmadan hemen önce decorator kontrol et, tüm giriş yaptığın fonksiyonlarda bu yapıyı kullan,
