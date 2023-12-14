@@ -113,11 +113,6 @@ def register():
     except Exception as e:
         print(e)
 
-
-@app.route("/article/<string:id>")
-def detail(id):
-    return "Article Id:" + id
-
 #Login İşlemi
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -177,7 +172,17 @@ class ArticleForm(FlaskForm):
     content = TextAreaField("Makale İçeriği", validators=[Length(min=10)]) #lineeditten daha geniş bir alan oluşturmak için, makale içeriği
 
 
-
+#Detay Sayfası
+@app.route("/article/<string:id>")
+def article(id):
+    cursor = connection.cursor()
+    query = "SELECT * FROM articles WHERE id = %s"
+    result = cursor.execute(query,(id,))
+    if result>0:
+        article = cursor.fetchone()
+        return render_template("article.html", article = article)
+    else:
+        return render_template("article.html")
 # Logout
 @app.route('/logout')
 def logout():
