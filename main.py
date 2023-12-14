@@ -79,6 +79,15 @@ def articles():
 @login_required #giriş yapılmadan hemen önce decorator kontrol et, tüm giriş yaptığın fonksiyonlarda bu yapıyı kullan,
 # büyük yapılarda her seferinde session kontrol edersin çok fazla if şartı yazman gerekir, decorator aktif kullan
 def dashboard():
+    cursor = connection.cursor()
+    query = "SELECT * FROM articles WHERE author = %s"
+    result = cursor.execute(query, (session["username"],))
+    if result >0:
+        articles = cursor.fetchall()
+        return render_template("dashboard.html", articles=articles)
+    else:
+        return render_template("dashboard.html")
+
     return render_template("dashboard.html")
 
 @app.route("/register", methods=["GET", "POST"])
