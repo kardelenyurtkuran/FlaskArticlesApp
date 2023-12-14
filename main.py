@@ -167,6 +167,17 @@ def addarticle():
 
 #Makale Form
 
+#makale Silme
+@app.route("/delete/<string:id>") #dinamik url
+@login_required #makale silmek için önce kullanıcı girişi olup olmadığını kontrol etmelisin
+def delete(id):
+    cursor = connection.cursor()
+    query = "SELECT * FROM articles WHERE author = %s AND id = %s"
+    result = cursor.execute()
+    if result>0:
+        pass
+    else:
+        pass
 class ArticleForm(FlaskForm):
     title = StringField("Makale Başlığı", validators=[Length(min=5, max=100)]) #lineedit benzeri bir alan, makale başlığı
     content = TextAreaField("Makale İçeriği", validators=[Length(min=10)]) #lineeditten daha geniş bir alan oluşturmak için, makale içeriği
