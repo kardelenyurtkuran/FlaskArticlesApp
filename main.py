@@ -165,7 +165,36 @@ def addarticle():
         return redirect(url_for("dashboard"))
     return render_template("addarticle.html", form =form)  #LoginForm ile oluşturduğun formu göndermek için form=form
 
-#Makale Form
+#Makale Güncelle
+@app.route("/edit/<string:id>", methods = ["GET", "POST"])
+@login_required #kullanıcı girişi yapılıp yapılmadığını kontrol etmek için
+def update(id):
+    if request.method == "GET":
+        cursor = connection.cursor()
+        query = "SELECT * FROM articles WHERE id= %s AND author= %s"
+        result = cursor.execute(query, (id, session["username"]))
+        if result == 0:
+            flash("Böyle bir makale yok veya bu işleme yetkiniz yok", "danger") #kullanıcıya ait bir makale değilse yada makale hiç yoksa result = 0 olacaktır
+            return redirect(url_for("index"))
+        else:
+            article = cursor.fetchone()
+            form = ArticleForm()
+            form.title.data = article["title"] #güncelle sayfasında içerik dolu olması için
+            form.content.data = article["content"] #güncelle sayfasında içerik dolu olması için
+            return render_template("update.html", form=form)
+
+    else: #POST REQUEST
+        form = ArticleForm(request.form)
+        newTitle = form.title.data #Yeni yazılanlar
+        newContent = form.content.data #Yeni yazılanlar
+        query2 = "UPDATE articles SET title = %s , content = %s WHERE id = %s"
+        cursor = connection.cursor()
+        cursor.execute(query2, (newTitle, newContent, id))
+        connection.commit()
+        flash("Makale Başarıyla Güncellendi", "success")
+        return redirect(url_for("dashboard"))
+
+
 
 #makale Silme
 @app.route("/delete/<string:id>") #dinamik url
@@ -173,11 +202,17 @@ def addarticle():
 def delete(id):
     cursor = connection.cursor()
     query = "SELECT * FROM articles WHERE author = %s AND id = %s"
-    result = cursor.execute()
+    result = cursor.execute(query, (session["username"],id))
     if result>0:
-        pass
+        query2 = "DELETE FROM articles WHERE id = %s"
+        cursor.execute(query2, (id,))
+        connection.commit() #sql tablosunun değiştiği bir sorgu yapıyorsan (CRUD)
+        return redirect(url_for("dashboard"))
     else:
-        pass
+        flash("Böyle bir makale yok veya bu işleme yetkiniz yok", "danger")
+        return redirect(url_for("index"))
+
+#Makale Form
 class ArticleForm(FlaskForm):
     title = StringField("Makale Başlığı", validators=[Length(min=5, max=100)]) #lineedit benzeri bir alan, makale başlığı
     content = TextAreaField("Makale İçeriği", validators=[Length(min=10)]) #lineeditten daha geniş bir alan oluşturmak için, makale içeriği
