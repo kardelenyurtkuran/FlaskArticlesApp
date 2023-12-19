@@ -229,10 +229,30 @@ def article(id):
         return render_template("article.html", article = article)
     else:
         return render_template("article.html")
+
+#Arama URL
+@app.route("/search", methods = ["GET", "POST"])
+def search():
+    if request.method == "GET":
+        return redirect(url_for("index")) #Herhangi bir get request kabul etme örneğin aramaya direk http://127.0.0.1:5000/search yazarsan başlangıç sayfasına yönlenirsin
+    else:
+        keyword = request.form.get("keyword") #input alanında yazan = keyword
+        cursor = connection.cursor()
+        query = "SELECT * FROM articles WHERE title LIKE '%" + keyword + "%' " #title da keyword geçenleri sıralamak için, search yaparken
+        result = cursor.execute(query)
+        if result==0:
+            flash("Aranan kelimeye uygun makale bulunamadı", "warning")
+            return redirect(url_for("articles"))
+        else:
+            articles = cursor.fetchall()
+            return render_template("articles.html", articles = articles)
+            pass
 # Logout
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
+
 if __name__ == "__main__":
     app.run(debug=True)
