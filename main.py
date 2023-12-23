@@ -40,6 +40,7 @@ def login_required(f): #decorator ana yapı
 
 # Kullanıcı Kayıt Formu
 class RegisterForm(FlaskForm):
+
     name = StringField("İsim Soyisim", validators=[Length(min=4, max=25)])
     username = StringField("Kullanıcı Adı", validators=[Length(min=5, max=35)])
     email = StringField("Email Adresi", validators=[Email(message="Lütfen geçerli bir email adresi girin")])
@@ -94,7 +95,7 @@ def dashboard():
 def register():
     try:
         form = RegisterForm(request.form)
-        print(form.validate(), form.errors) # form.validate() false olursa dönen hatayı ekrana yazdırmak için
+        #print(form.validate(), form.errors) # form.validate() false olursa dönen hatayı ekrana yazdırmak için, aynı zamanda proje üstünde de yazdırıyor
         if request.method == "POST" and form.validate(): #form.validate istenen tüm şartları sağlaması halinde True döner. Formda doldurulan alanlarda bir problem olup olmadığı kontrol edilir
             name = form.name.data #formda ki name bilgisini almak
             username = form.username.data
