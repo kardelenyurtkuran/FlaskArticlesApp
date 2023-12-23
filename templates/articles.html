@@ -2,13 +2,13 @@
 
 {% block body %}
 
-<h3>Makaleler</h3>
+<h3>Articles</h3>
 <hr>
 {% if articles %}
 
     <form action="/search" method = "post">
-    <input type="text" name= "keyword" id="form1" class="form-control" placeholder="Ara..."/> <!--in bootsnipp /bootstrap--> <!--name = keyword formda ki bilgiyi tutar-->
-    <button type="submit" class="btn btn-danger" >Search</button> <!--type submit olursa başka sayfaya yönlendirme yapabilirsin-->
+    <input type="text" name= "keyword" id="form1" class="form-control" placeholder="Search..."/> <!--in bootsnipp /bootstrap--> <!--name = Keeps information in keyword form-->
+    <button type="submit" class="btn btn-danger" >Search</button> <!--If type submit, you can redirect to another page-->
     </form>
     <hr>
 
@@ -19,7 +19,7 @@
     </ul>
 
     {% else %}
-        <div class = "alert alert-danger">Bu blokta henüz makale bulunmuyor</div>
+        <div class = "alert alert-danger">There are no articles in this blog yet</div>
     {% endif %}
 
 {%endblock body%}

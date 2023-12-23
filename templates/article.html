@@ -1,20 +1,26 @@
 {%extends "layout.html" %}
 
-{% block body %}
 
+{% block body %}
+{% from "includes/formhelpers.html" import render_field %}
 {%if article %}
 
 <h4>{{article.title}}</h4>
 <hr>
-Yazar : {{article.author}}
+Author : {{article.author}}
 <hr>
-Tarih: {{article.created_date}}
+Date: {{article.created_date}}
 <hr>
-İçerik : {{article.content | safe}} <!-- |safe yazarsan CKEditör ile oluşturdukların html kodu olarak gözükmez -->
+Content : {{article.content | safe}} <!-- |If you type safe, what you create with CKEditor will not appear as HTML code. -->
 {%else %}
 
-<div class="alert alert-warning">Böyle bir makale bulunmuyor</div>
+<div class="alert alert-warning">There is no such article</div>
 
 {%endif %}
+
+<hr>
+<h2><font color="green"> Comment </font></h2>
+{{ render_field(form.commentTitle) }}
+{{ render_field(form.comment) }}
 
 {% endblock body %}

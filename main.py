@@ -54,6 +54,10 @@ class LoginForm(FlaskForm):
     username = StringField("Username")
     password = PasswordField("Password")
 
+class CommentForm(FlaskForm):
+    commentTitle = StringField("Comment Title")
+    comment = TextAreaField("Comment")
+
 
 @app.route("/")
 def index():
@@ -220,16 +224,20 @@ class ArticleForm(FlaskForm):
 
 
 #Detay Sayfası
-@app.route("/article/<string:id>")
+@app.route("/article/<string:id>", methods=["GET", "POST"])
 def article(id):
+    form = CommentForm(request.form)
+
+    commentTitle =form.commentTitle.data
+    comment = form.comment.data
     cursor = connection.cursor()
     query = "SELECT * FROM articles WHERE id = %s"
     result = cursor.execute(query,(id,))
     if result>0:
         article = cursor.fetchone()
-        return render_template("article.html", article = article)
+        return render_template("article.html", article = article, form=form)
     else:
-        return render_template("article.html")
+        return render_template("article.html", form=form)
 
 #Arama URL
 @app.route("/search", methods = ["GET", "POST"])
