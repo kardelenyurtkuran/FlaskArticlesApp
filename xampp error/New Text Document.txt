@@ -1,0 +1,11 @@
+httpd.conf
+
+Listen : 80 -> Listen : 8080
+ServerName localhost:80 -> ServerName localhost:8080
+
+httpd-ssl.conf
+Listen 443 -> Listen 4433
+
+UPDATE VCRUNTIME140.dll file
+
+Download Visual C++ Redistributable for Visual Studio
