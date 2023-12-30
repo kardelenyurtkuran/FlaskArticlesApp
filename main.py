@@ -132,7 +132,7 @@ def login():
         if result > 0: #If there is a user with the entered username
             data = cursor.fetchone() # the entire row with username
             real_password = data["password"]
-
+            session["id"] = data["id"]
             if sha256_crypt.verify(password_entered, real_password): #The user exists and the password is correct
                 flash("You have successfully logged in", "success")
                 session["logged_in"] = True  #Session control
@@ -228,13 +228,24 @@ class ArticleForm(FlaskForm):
 def article(id):
     form = CommentForm(request.form)
 
-    commentTitle =form.commentTitle.data
-    comment = form.comment.data
+
     cursor = connection.cursor()
     query = "SELECT * FROM articles WHERE id = %s"
     result = cursor.execute(query,(id,))
     if result>0:
         article = cursor.fetchone()
+        if request.method =="POST":
+            commentTitle = form.commentTitle.data
+            comment = form.comment.data
+            query2 = "INSERT INTO comments (user, article_id, comment, comment_title) VALUES (%s, %s, %s, %s)"
+            print(session["id"])
+            print(id)
+            print(comment)
+            print(commentTitle)
+            cursor.execute(query2, (session["id"], id, comment, commentTitle))
+            connection.commit()
+            cursor.close()
+            flash("Your comment has been added successfully", "success")  # message, category
         return render_template("article.html", article = article, form=form)
     else:
         return render_template("article.html", form=form)

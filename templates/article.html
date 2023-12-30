@@ -18,10 +18,14 @@ Content : {{article.content | safe}} <!-- |If you type safe, what you create wit
 
 {%endif %}
 
+<form method="post" >
 <hr>
 <h2><font color="green"> Comment </font></h2>
 {{ render_field(form.commentTitle, class="form-control" ) }}
 {{ render_field(form.comment, class="form-control" ) }}
 <button class="btn btn-primary" type="submit">Send</button>
+<hr>
+</form>
 
+<h4><font color="gray"> Comments </font></h4>
 {% endblock body %}
