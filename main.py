@@ -38,7 +38,7 @@ def login_required(f): #decorator main structure
     return decorated_function #decorator main structure
 
 
-# Kullanıcı Kayıt Formu
+#Register User Form
 class RegisterForm(FlaskForm):
 
     name = StringField("Name Surname", validators=[Length(min=4, max=25)])
@@ -57,7 +57,6 @@ class LoginForm(FlaskForm):
 class CommentForm(FlaskForm):
     commentTitle = StringField("Comment Title")
     comment = TextAreaField("Comment")
-
 
 @app.route("/")
 def index():
@@ -118,7 +117,7 @@ def register():
     except Exception as e:
         print(e)
 
-#Login İşlemi
+#Login
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm(request.form)
@@ -153,7 +152,7 @@ def login():
         cursor.close()  #To avoid using unnecessary resources in the background
     return render_template("login.html", form=form)  #To send the form you created with LoginForm, use form=form
 
-#Makale ekleme
+#Add Article
 @app.route("/addarticle", methods=["GET", "POST"])
 def addarticle():
     form = ArticleForm(request.form)
@@ -170,7 +169,7 @@ def addarticle():
         return redirect(url_for("dashboard"))
     return render_template("addarticle.html", form =form)  #To send the form you created with LoginForm, use form=form
 
-#Makale Güncelle
+#Update Article
 @app.route("/edit/<string:id>", methods = ["GET", "POST"])
 @login_required #To check whether the user is logged in or not
 def update(id):
@@ -201,7 +200,7 @@ def update(id):
 
 
 
-#makale Silme
+#Delete Article
 @app.route("/delete/<string:id>") #dynamic url
 @login_required #To delete an article, you must first check if there is user login.
 def delete(id):
@@ -217,40 +216,36 @@ def delete(id):
         flash("No such article exists or you are not authorized for this action", "danger")
         return redirect(url_for("index"))
 
-#Makale Form
+#Article Form
 class ArticleForm(FlaskForm):
     title = StringField("Article title", validators=[Length(min=5, max=100)]) #lineedit-like area, article title
     content = TextAreaField("Article Content", validators=[Length(min=10)]) #To create a larger area than lineedit, article content
 
-
-#Detay Sayfası
+#Detail Page
 @app.route("/article/<string:id>", methods=["GET", "POST"])
 def article(id):
     form = CommentForm(request.form)
-
-
-    cursor = connection.cursor()
-    query = "SELECT * FROM articles WHERE id = %s"
-    result = cursor.execute(query,(id,))
-    if result>0:
-        article = cursor.fetchone()
-        if request.method =="POST":
-            commentTitle = form.commentTitle.data
-            comment = form.comment.data
-            query2 = "INSERT INTO comments (user, article_id, comment, comment_title) VALUES (%s, %s, %s, %s)"
-            print(session["id"])
-            print(id)
-            print(comment)
-            print(commentTitle)
-            cursor.execute(query2, (session["id"], id, comment, commentTitle))
-            connection.commit()
+    if request.method == "GET":
+        cursor = connection.cursor()
+        query = "SELECT * FROM articles WHERE id = %s"
+        result = cursor.execute(query,(id,))
+        if result>0:
+            article = cursor.fetchone()
             cursor.close()
-            flash("Your comment has been added successfully", "success")  # message, category
-        return render_template("article.html", article = article, form=form)
+            return render_template("article.html", article = article, form=form)
     else:
+        cursor = connection.cursor()
+        commentTitle = form.commentTitle.data
+        comment = form.comment.data
+        query2 = "INSERT INTO comments (user, article_id, comment, comment_title) VALUES (%s, %s, %s, %s)"
+        cursor.execute(query2, (session["id"], id, comment, commentTitle))
+        connection.commit()
+        cursor.close()
+        flash("Your comment has been added successfully", "success")  # message, category
         return render_template("article.html", form=form)
+    return render_template("article.html")
 
-#Arama URL
+#search URL
 @app.route("/search", methods = ["GET", "POST"])
 def search():
     if request.method == "GET":
