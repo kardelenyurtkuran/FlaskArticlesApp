@@ -221,6 +221,7 @@ class ArticleForm(FlaskForm):
     title = StringField("Article title", validators=[Length(min=5, max=100)]) #lineedit-like area, article title
     content = TextAreaField("Article Content", validators=[Length(min=10)]) #To create a larger area than lineedit, article content
 
+
 #Detail Page
 @app.route("/article/<string:id>", methods=["GET", "POST"])
 def article(id):
