@@ -198,8 +198,6 @@ def update(id):
         flash("Article Updated Successfully", "success")
         return redirect(url_for("dashboard"))
 
-
-
 #Delete Article
 @app.route("/delete/<string:id>") #dynamic url
 @login_required #To delete an article, you must first check if there is user login.
@@ -232,14 +230,21 @@ def article(id):
         result = cursor.execute(query,(id,))
         if result>0:
             article = cursor.fetchone()
-            cursor.close()
-            return render_template("article.html", article = article, form=form)
+            query2 = "SELECT * FROM comments"
+            result2 = cursor.execute(query2)
+            if result2>0:
+                comments = cursor.fetchall()
+                cursor.close()
+                return render_template("article.html", article = article, form=form, comments= comments)
+            else:
+                cursor.close()
+                return render_template("article.html", article=article, form=form)
     else:
         cursor = connection.cursor()
         commentTitle = form.commentTitle.data
         comment = form.comment.data
-        query2 = "INSERT INTO comments (user, article_id, comment, comment_title) VALUES (%s, %s, %s, %s)"
-        cursor.execute(query2, (session["id"], id, comment, commentTitle))
+        query3 = "INSERT INTO comments (user, article_id, comment, comment_title) VALUES (%s, %s, %s, %s)"
+        cursor.execute(query3, (session["id"], id, comment, commentTitle))
         connection.commit()
         cursor.close()
         flash("Your comment has been added successfully", "success")  # message, category

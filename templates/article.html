@@ -28,4 +28,14 @@ Content : {{article.content | safe}} <!-- |If you type safe, what you create wit
 </form>
 
 <h4><font color="gray"> Comments </font></h4>
+
+{%if comments %}
+{%for comment in comments%}
+Author : comment.user
+Date: comment.comment_date
+comment.comment.comment_title
+comment.comment
+<hr>
+{%endfor%}
+{%endif %}
 {% endblock body %}
