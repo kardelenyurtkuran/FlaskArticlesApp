@@ -31,10 +31,10 @@ Content : {{article.content | safe}} <!-- |If you type safe, what you create wit
 
 {%if comments %}
 {%for comment in comments%}
-Author : comment.user
-Date: comment.comment_date
-comment.comment.comment_title
-comment.comment
+Author : {{comment.name}}
+Date: {{comment.comment_date}}
+{{comment.comment_title}}
+{{comment.comment}}
 <hr>
 {%endfor%}
 {%endif %}

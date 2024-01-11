@@ -230,10 +230,11 @@ def article(id):
         result = cursor.execute(query,(id,))
         if result>0:
             article = cursor.fetchone()
-            query2 = "SELECT * FROM comments"
-            result2 = cursor.execute(query2)
+            query2 = "SELECT comments.*, users.name FROM comments INNER JOIN users ON comments.user = users.id WHERE comments.article_id = %s;"
+            result2 = cursor.execute(query2, (id,))
             if result2>0:
                 comments = cursor.fetchall()
+                print(comments)
                 cursor.close()
                 return render_template("article.html", article = article, form=form, comments= comments)
             else:
