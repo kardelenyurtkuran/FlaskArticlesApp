@@ -249,9 +249,8 @@ def article(id):
         connection.commit()
         cursor.close()
         flash("Your comment has been added successfully", "success")  # message, category
-        return render_template("article.html", form=form)
+        return redirect(url_for("article", id=id)) #PRG Deseni (POST-Redirect-GET).Bu desen, kullanıcının bir form gönderdikten sonra tarayıcılarının yeniden yükleme düğmesine basması durumunda ortaya çıkan sorunları önler.
     return render_template("article.html")
-
 
 #search URL
 @app.route("/search", methods = ["GET", "POST"])
