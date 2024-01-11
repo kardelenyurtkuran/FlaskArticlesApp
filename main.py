@@ -252,6 +252,7 @@ def article(id):
         return render_template("article.html", form=form)
     return render_template("article.html")
 
+
 #search URL
 @app.route("/search", methods = ["GET", "POST"])
 def search():
