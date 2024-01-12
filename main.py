@@ -249,7 +249,7 @@ def article(id):
         connection.commit()
         cursor.close()
         flash("Your comment has been added successfully", "success")  # message, category
-        return redirect(url_for("article", id=id)) #PRG Deseni (POST-Redirect-GET).Bu desen, kullanıcının bir form gönderdikten sonra tarayıcılarının yeniden yükleme düğmesine basması durumunda ortaya çıkan sorunları önler.
+        return redirect(url_for("article", id=id)) #PRG Pattern (POST-Redirect-GET). This pattern prevents problems that occur if the user hits their browser's reload button after submitting a form.
     return render_template("article.html")
 
 #search URL

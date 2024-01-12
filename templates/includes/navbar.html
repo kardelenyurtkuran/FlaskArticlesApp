@@ -21,6 +21,10 @@
       <li class="nav-item active">
         <a class="nav-link" href="/logout">Log out</a>
       </li>
+
+      <li class="nav-item active">
+        <a class="nav-link" href="/profile/{{session['username']}}">Profile</a> <!-- setting username as href extension -->
+      </li>
       {% else %}
       <li class="nav-item active">
         <a class="nav-link" href="/logout">Login</a>
