@@ -94,6 +94,22 @@ def dashboard():
 
     return render_template("dashboard.html")
 
+@app.route("/profile/{{session['username']}}")
+@login_required #Check the decorator just before logging in, use this structure in all your logged in functions,
+# In large structures, you check the session every time, you have to write a lot of if conditions, use decorator active.
+def profile(id):
+    print(session['id'])
+    # cursor = connection.cursor()
+    # query = "SELECT * FROM users WHERE author = %s"
+    # result = cursor.execute(query, (session["username"],))
+    # if result >0:
+    #     articles = cursor.fetchall()
+    #     return render_template("dashboard.html", articles=articles)
+    # else:
+    #     return render_template("dashboard.html")
+    #
+    return render_template("profile.html")
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     try:
