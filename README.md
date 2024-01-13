@@ -1,8 +1,8 @@
 # FlaskArticlesApp
 FlaskArticlesApp is a simple user project to add articles to CRUD and MySQL tables with Python Flask framework
 
-##Database schemas
-###articles Table
+## Database schemas
+### articles Table
 
 | Column name  | Data Type     | Explanation           |
 |--------------|---------------|-----------------------|
