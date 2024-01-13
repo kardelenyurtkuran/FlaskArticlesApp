@@ -27,7 +27,7 @@ FlaskArticlesApp is a simple user project to add articles to CRUD and MySQL tabl
 | Column name   | Data Type     | Explanation                  |
 |---------------|---------------|------------------------------|
 | id            | INT           | comment ID                   |
-| user          | TEXT          | User ID who made the comment |
+| user          | TEXT          | user ID who made the comment |
 | article_id    | INT           | commented article id         |
 | comment       | TEXT          | comment content              |
 | comment_title | TEXT          | comment title                |
