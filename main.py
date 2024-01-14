@@ -106,6 +106,13 @@ def profile(username):
     else:
         return render_template("profile.html")
 
+@app.route('/profile/edit/username', methods = ["GET", "POST"])
+@login_required
+def edit_username(id):
+    cursor = connection.cursor()
+    if request.method == "POST":
+        query = "UPDATE users SET "
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     try:
@@ -168,7 +175,6 @@ def login():
 @app.route("/addarticle", methods=["GET", "POST"])
 def addarticle():
     form = ArticleForm(request.form)
-    print(session["username"])
     if request.method == "POST" and form.validate():
         title = form.title.data
         content = form.content.data

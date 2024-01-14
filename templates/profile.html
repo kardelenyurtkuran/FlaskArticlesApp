@@ -8,6 +8,8 @@ Name : {{user.name}}
 Email: {{user.email}}
 <hr>
 Username: {{user.username}}
+<td><a href="/profile/edit/username">Edit</a></td>
 <hr>
-Password : {{user.password}}
+Password : <input type="password" value="{{ user.password }}" readonly>
+<td><a href="/profile/edit/password">Edit</a></td>
 {% endblock body %}
