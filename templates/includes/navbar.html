@@ -23,8 +23,9 @@
       </li>
 
       <li class="nav-item active">
-        <a class="nav-link" href="/profile/{{session['username']}}">Profile</a> <!-- setting username as href extension -->
+        <a class="nav-link" href="{{ url_for('profile', username=session['username']) }}">Profile</a>
       </li>
+
       {% else %}
       <li class="nav-item active">
         <a class="nav-link" href="/logout">Login</a>
