@@ -1,6 +1,24 @@
 {% extends "layout.html" %}
 
 {% block body %}
+
+
+<html>
+<head>
+    <title>Save Picture</title>
+</head>
+<body>
+    <h2>Save Profile Picture</h2>
+    <form method="POST" action="/upload" enctype="multipart/form-data">
+        <label for="profile_picture">Choose Profile Photo:</label>
+        <input type="file" name="profile_picture" accept="image/*">
+        <input type="submit" value="Load">
+    </form>
+</body>
+</html>
+
+
+
 <h4>{{user.username}}</h4>
 <hr>
 Name : {{user.name}}
